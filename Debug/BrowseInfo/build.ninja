@@ -1,0 +1,41 @@
+##IAR Ninja build file
+
+
+#Rules
+rule COMPILER_XCL
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\common\bin\XclFileGenerator.exe" $xclcommand -f "$rspfile_name"
+  description = IAR_NEW_TOOL+++COMPILER_XCL+++$out
+  rspfile = $rspfile_name
+  rspfile_content = $flags
+
+rule INDEXER
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\common\bin\SourceIndexer.exe" $flags
+  depfile = $out.dep
+  deps = gcc
+  description = IAR_NEW_TOOL+++INDEXER+++$out
+
+rule MAKEBROWSE
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\common\bin\makeBrowseData.exe" $flags
+  description = IAR_NEW_TOOL+++MAKEBROWSE+++$out
+
+rule PDBLINK
+  command = "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\common\bin\PbdLink.exe" $flags
+  description = IAR_NEW_TOOL+++PDBLINK+++$out
+
+
+
+#Build steps
+build C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.xcl : COMPILER_XCL 
+    flags = "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\main.c" -o "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\Obj\\" --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa --no_clustering --no_scheduling --debug --endian=little --cpu=ARM7TDMI-S -e --fpu=None --dlib_config "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\arm\inc\c\DLib_Config_Normal.h" --cpu_mode thumb -Ol --predef_macros "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.tmp"
+    rspfile_name = C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.xcl.rsp
+    xclcommand = -source_file "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\main.c" -xcl_file "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.xcl" -macro_file "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.tmp" -icc_path "C$:\Program$ Files\IAR$ Systems\Embedded$ Workbench$ 9.2\arm\bin\iccarm.exe"
+
+build C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.pbi : INDEXER C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.xcl | C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\main.c
+    flags = "-out=C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.pbi" -f "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.xcl"
+
+build C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbw : MAKEBROWSE C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbd
+    flags = "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbd" -output "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbw"
+
+build C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbd : PDBLINK C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.pbi
+    flags = -M "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\SEMESTER_PROJECT_FINAL.pbd" "C$:\Users\kidus\Desktop\5th$ Year$ 1st$ Semester\Interface$ project\Debug\BrowseInfo\main.pbi"
+
